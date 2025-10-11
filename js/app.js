@@ -43,11 +43,13 @@ async function loadData() {
             if (!visitorsResponse.ok) throw new Error('Failed to fetch visitors');
             const visitorsData = await visitorsResponse.json();
             
-            // Combine data from both APIs
+            // ✅ Combine data from both APIs
             const data = {
                 region: infoData.region,
                 timestamp: infoData.timestamp,
                 responseTime: infoData.responseTime,
+                uptime: infoData.uptime,
+                activeRegions: infoData.activeRegions,
                 visitors: visitorsData.visitorCount,
                 dbStatus: visitorsData.dbStatus
             };
