@@ -1,5 +1,5 @@
 // API Base URL - سيتم تغييره لاحقاً عند النشر
-const API_BASE = '/api'; // للتطوير المحلي مع Azure Functions
+const API_BASE = 'https://func-cloudres-centralus-prod.azurewebsites.net/api'; // للتطوير المحلي مع Azure Functions
 
 // Configuration
 const config = {
