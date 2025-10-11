@@ -1,10 +1,10 @@
-// API Base URL - سيتم تغييره لاحقاً عند النشر
-const API_BASE = 'https://func-cloudres-centralus-prod.azurewebsites.net/api'; // للتطوير المحلي مع Azure Functions
+// API Base URL
+const API_BASE = 'https://func-cloudres-centralus-prod.azurewebsites.net/api';
 
 // Configuration
 const config = {
     refreshInterval: 30000, // 30 seconds
-    simulateData: false // true للتجربة بدون API, false عند النشر
+    simulateData: false // false = use real API
 };
 
 // Simulated data for testing
@@ -34,10 +34,24 @@ async function loadData() {
             await new Promise(resolve => setTimeout(resolve, 800));
             updateUI(simulatedData);
         } else {
-            // Real API call
-            const response = await fetch(`${API_BASE}/GetInfo`);
-            if (!response.ok) throw new Error('Failed to fetch data');
-            const data = await response.json();
+            // Real API calls - fetch both info and visitors
+            const infoResponse = await fetch(`${API_BASE}/info`);
+            if (!infoResponse.ok) throw new Error('Failed to fetch info');
+            const infoData = await infoResponse.json();
+            
+            const visitorsResponse = await fetch(`${API_BASE}/visitors`);
+            if (!visitorsResponse.ok) throw new Error('Failed to fetch visitors');
+            const visitorsData = await visitorsResponse.json();
+            
+            // Combine data from both APIs
+            const data = {
+                region: infoData.region,
+                timestamp: infoData.timestamp,
+                responseTime: infoData.responseTime,
+                visitors: visitorsData.visitorCount,
+                dbStatus: visitorsData.dbStatus
+            };
+            
             updateUI(data);
         }
     } catch (error) {
@@ -72,8 +86,13 @@ function updateUI(data) {
     // Database status
     const dbStatusEl = document.getElementById('db-status');
     const dbStatusTextEl = document.getElementById('db-status-text');
-    dbStatusEl.className = 'status-indicator status-online';
-    dbStatusTextEl.textContent = i18n.t('status.connected');
+    if (data.dbStatus === 'connected') {
+        dbStatusEl.className = 'status-indicator status-online';
+        dbStatusTextEl.textContent = i18n.t('status.connected');
+    } else {
+        dbStatusEl.className = 'status-indicator status-error';
+        dbStatusTextEl.textContent = i18n.t('status.error');
+    }
 
     // Visitors
     document.getElementById('visitors').textContent =
@@ -125,15 +144,16 @@ async function incrementVisitor() {
             showToast(i18n.t('messages.counterIncremented'));
         } else {
             // Real API call
-            const response = await fetch(`${API_BASE}/IncrementVisitor`, {
+            const response = await fetch(`${API_BASE}/increment`, {
                 method: 'POST'
             });
 
             if (!response.ok) throw new Error('Failed to increment');
 
             const data = await response.json();
+            // Use visitorCount from API response
             document.getElementById('visitors').textContent =
-                data.visitors.toLocaleString(i18n.currentLang);
+                data.visitorCount.toLocaleString(i18n.currentLang);
             showToast(i18n.t('messages.counterIncremented'));
         }
     } catch (error) {
@@ -180,7 +200,6 @@ if (typeof module !== 'undefined' && module.exports) {
         viewLogs
     };
 }
-
 
 // Dark Mode Toggle
 document.addEventListener('DOMContentLoaded', () => {
