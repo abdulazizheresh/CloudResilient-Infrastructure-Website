@@ -26,6 +26,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
+// Format region name for display
+function formatRegionName(region) {
+    // Map of region codes to display names
+    const regionNames = {
+        'centralus': 'Central US',
+        'westus': 'West US',
+        'eastus': 'East US',
+        'northeurope': 'North Europe',
+        'westeurope': 'West Europe',
+        'southeastasia': 'Southeast Asia',
+        'eastasia': 'East Asia',
+        'uksouth': 'UK South',
+        'ukwest': 'UK West'
+    };
+    
+    // Return formatted name or capitalize first letter if not in map
+    return regionNames[region.toLowerCase()] || 
+        region.charAt(0).toUpperCase() + region.slice(1);
+}
+
 // Main function to load data
 async function loadData() {
     try {
@@ -70,7 +90,7 @@ async function loadData() {
 // Update UI with data
 function updateUI(data) {
     // Region
-    document.getElementById('region').textContent = data.region;
+    document.getElementById('region').textContent = formatRegionName(data.region);
 
     // Status
     const statusEl = document.getElementById('status');
