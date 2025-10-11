@@ -4,7 +4,7 @@ const API_BASE = 'https://func-cloudres-centralus-prod.azurewebsites.net/api'; /
 // Configuration
 const config = {
     refreshInterval: 30000, // 30 seconds
-    simulateData: true // true للتجربة بدون API, false عند النشر
+    simulateData: false // true للتجربة بدون API, false عند النشر
 };
 
 // Simulated data for testing
