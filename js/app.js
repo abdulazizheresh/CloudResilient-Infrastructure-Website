@@ -1,5 +1,5 @@
 // API Base URL
-const API_BASE = 'https://api.azuretest100.site';
+const API_BASE = 'https://api.azuretest100.site/api';
 
 // Configuration
 const config = {
