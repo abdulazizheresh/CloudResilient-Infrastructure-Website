@@ -1,5 +1,5 @@
 // API Base URL
-const API_BASE = 'https://func-cloudres-centralus-prod.azurewebsites.net/api';
+const API_BASE = 'https://api.azuretest100.site/api';
 
 // Configuration
 const config = {
@@ -9,7 +9,7 @@ const config = {
 
 // Simulated data for testing
 const simulatedData = {
-    region: 'West Us',
+    region: 'Central US',
     timestamp: new Date().toLocaleString('en-US'),
     visitors: Math.floor(Math.random() * 1000) + 100,
     responseTime: Math.floor(Math.random() * 50) + 20,
