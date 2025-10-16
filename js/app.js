@@ -130,19 +130,29 @@ function startAutoRefresh() {
 }
 
 // Test failover
-function testFailover() {
-    showToast(i18n.t('messages.failoverTesting'));
-
-    setTimeout(() => {
-        const newRegion = simulatedData.region === 'West Us' ?
-            'North Europe' : 'West Us';
-        simulatedData.region = newRegion;
-        document.getElementById('region').textContent = newRegion;
-
-        // Use translation with variable
-        const message = i18n.t('messages.failoverSuccess', { region: newRegion });
-        showToast(message);
-    }, 2000);
+async function testFailover() {
+    if (!confirm('⚠️ This will stop the current region. Continue?')) return;
+    
+    showToast('Testing failover...', 'info');
+    
+    try {
+        const response = await fetch(`${API_BASE}/test-failover`, {
+            method: 'POST'
+        });
+        
+        if (!response.ok) throw new Error('Failover failed');
+        
+        const data = await response.json();
+        showToast(`✅ ${data.message}`, 'success');
+        
+        setTimeout(() => {
+            loadData();
+            showToast('Failover complete! Now using backup region.', 'success');
+        }, 180000);
+        
+    } catch (error) {
+        showToast('Failover test failed: ' + error.message, 'error');
+    }
 }
 
 // Increment visitor counter
