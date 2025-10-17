@@ -1,12 +1,15 @@
 {
+  "routes": [
+    {
+      "route": "/Admin/*",
+      "allowedRoles": ["anonymous"]
+    }
+  ],
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/Admin/*", "/css/*", "/js/*", "/assets/*"]
+    "exclude": ["/Admin/*", "*.{css,js,png,jpg,gif,ico}"]
   },
-  "mimeTypes": {
-    ".css": "text/css",
-    ".js": "text/javascript"
-  },
-  "routes": [],
-  "responseOverrides": {}
+  "globalHeaders": {
+    "cache-control": "must-revalidate, max-age=3600"
+  }
 }
