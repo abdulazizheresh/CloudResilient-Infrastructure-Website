@@ -1,0 +1,23 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": [
+      "/Admin/*",
+      "/css/*",
+      "/js/*",
+      "/assets/*",
+      "/api/*"
+    ]
+  },
+  "routes": [
+    {
+      "route": "/Admin/*",
+      "allowedRoles": ["anonymous"]
+    }
+  ],
+  "responseOverrides": {
+    "404": {
+      "rewrite": "/index.html"
+    }
+  }
+}
