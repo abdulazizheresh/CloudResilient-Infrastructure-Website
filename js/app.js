@@ -130,6 +130,7 @@ function startAutoRefresh() {
 }
 
 // Test failover
+// Test failover
 async function testFailover() {
     if (!confirm('⚠️ This will stop the current region. Continue?')) return;
     
@@ -148,7 +149,7 @@ async function testFailover() {
         setTimeout(() => {
             loadData();
             showToast('Failover complete! Now using backup region.', 'success');
-        }, 180000);
+        }, 20000); // 20 Seconds wait before refresh
         
     } catch (error) {
         showToast('Failover test failed: ' + error.message, 'error');
